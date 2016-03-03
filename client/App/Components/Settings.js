@@ -27,6 +27,8 @@ class Settings extends React.Component {
       component: PhotosView,
       userId: this.props.userId,
       favorites: true,
+      // Add Streams true
+      streams: true,
       previousComponent: 'settings'
     });
   }
