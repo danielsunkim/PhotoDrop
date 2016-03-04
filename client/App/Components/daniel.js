@@ -60,29 +60,10 @@ class PhotosView extends React.Component{
       allViewablePhotos: undefined,
       isRefreshing: false,
     };
-      if(this.state.favorites) {
-        api.fetchUserFavorites(this.state.userId, (photos) => {
-          var photosArr = JSON.parse(photos);
-          this.setState({ userFavoritesUrls: photosArr });
-        })
-        api.fetchUserPhotos(this.state.userId, (photos) => {
-          var photosArr = JSON.parse(photos);
-          var photosUrls = photosArr.map((photo) => {
-            return photo.url;
-          });
-          this.setState({ imageUrls: photosUrls });
-          this.setState({ userPhotosUrls: photosUrls });
-        })
-      } 
-      if ( true ) {
-      // NEW: grab streams photos
-      // TODO: needs a function in api called api.fetchUserStreams
-      // set the userStreamsUrls as the collection of photos
-      api.fetchUserStreams(this.state.userId, (photos) => {
+    if(this.state.favorites) {
+      api.fetchUserFavorites(this.state.userId, (photos) => {
         var photosArr = JSON.parse(photos);
-        console.log('sfgsfgfsdgsfdgsdgsfdsfdgsf', photosArr); 
-        this.setState({ userStreamsUrls: photosArr });
-        console.log(this.state.userStreamsUrls);
+        this.setState({ userFavoritesUrls: photosArr });
       })
       api.fetchUserPhotos(this.state.userId, (photos) => {
         var photosArr = JSON.parse(photos);
@@ -92,6 +73,20 @@ class PhotosView extends React.Component{
         this.setState({ imageUrls: photosUrls });
         this.setState({ userPhotosUrls: photosUrls });
       })
+      if ( this.state.streams ) {
+        api.fetchUserStreams(this.state.userId, (photos) => {
+          var photosArr = JSON.parse(photos);
+          this.setState({ userStreamsUrls: photosArr });
+        })
+        api.fetchUserPhotos(this.state.userId, (photos) => {
+          var photosArr = JSON.parse(photos);
+          var photosUrls = photosArr.map((photo) => {
+          return photo.url;
+        });
+          this.setState({ imageUrls: photosUrls });
+          this.setState({ userPhotosUrls: photosUrls });
+        })
+      }
     } else {
       navigator.geolocation.getCurrentPosition(
         location => {
@@ -112,10 +107,11 @@ class PhotosView extends React.Component{
   }
 
   componentDidMount() {
-    if(this.state.favorites || this.state.streams){
+    if(this.state.favorites){
       this.setState({ imageUrls: this.state.userPhotosUrls});
-    // } else if(this.state.streams){
-    //   this.setState({ imageUrls: this.state.userPhotosUrls});
+      // streams
+    } else if (this.state.streams) {
+      this.setState({ imageUrls: this.state.userPhotosUrls});
     } else {
       this.setState({ imageUrls: this.state.allViewablePhotos});
     }
@@ -194,6 +190,7 @@ class PhotosView extends React.Component{
     this.setState({
       selectedIndex: event.nativeEvent.selectedSegmentIndex,
     });
+    // Click here on upload by you, favorites, or streams
     if(event.nativeEvent.selectedSegmentIndex===0) {
         this.setState({ imageUrls: this.state.userPhotosUrls});
     } else if(event.nativeEvent.selectedSegmentIndex===1) {
@@ -219,6 +216,7 @@ class PhotosView extends React.Component{
         // this.setState({ imageUrls: photosUrls });
         this.setState({ userPhotosUrls: photosUrls });
       })
+      // add imageUrls to this photo, favorites, or StreamsUrl
       if(this.state.selectedIndex===0) {
         this.setState({imageUrls: this.state.userPhotosUrls});
       } else if(this.state.selectedIndex===1) {
