@@ -80,7 +80,7 @@ class PhotosView extends React.Component{
       // set the userStreamsUrls as the collection of photos
       api.fetchUserStreams(this.state.userId, (photos) => {
         var photosArr = JSON.parse(photos);
-        console.log('sfgsfgfsdgsfdgsdgsfdsfdgsf', photosArr); 
+        console.log(photosArr); 
         this.setState({ userStreamsUrls: photosArr });
         console.log(this.state.userStreamsUrls);
       })

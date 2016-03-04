@@ -38,6 +38,7 @@ class Settings extends React.Component {
       component: FriendsView,
       userId: this.props.userId,
       favorites: true,
+      streams: true,
       previousComponent: 'settings'
     });
   }

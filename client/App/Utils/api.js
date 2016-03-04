@@ -127,12 +127,10 @@ var api = {
       headers: {
         'Content-Type': 'application/json'
       }
-    }).then(function(photos) {
-      console.log('hi');
-      callback(photos._bodyInit);
+    }).then(function(photoCollections) {
+      callback(photoCollections._bodyInit);
     })
     .catch(function(err) {
-      console.log('hi2');
       console.log(err);
     });
   },
